@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="flex justify-center">
+  <h1 class="text-4xl font-bold neon-text text-center mb-8" data-translate="verify_title">
+    Verify Your Product
+  </h1>
+</div>
+
+<form method="POST" class="max-w-md mx-auto bg-[#111] p-6 rounded-xl neon-border">
+  <label for="code" class="block text-gray-300 mb-2" data-translate="verify_label">
+    Enter Product Code:
+  </label>
+  <input type="text" name="code" id="code"
+         class="w-full p-3 rounded-lg bg-black text-white border border-cyan-400 focus:outline-none focus:ring focus:ring-cyan-500"
+         placeholder="ATS/XXXXX/XXXXX">
+  <button type="submit"
+          class="w-full mt-4 bg-gradient-to-r from-purple-600 to-cyan-400 text-white py-3 rounded-lg shadow-lg hover:scale-105 transition"
+          data-translate="verify_btn">
+    Verify
+  </button>
+</form>
+
+{% if result %}
+  <p id="verify-message" class="text-center mt-6 text-lg"></p>
+{% endif %}
+
+<script>
+  // Translation object for verify messages
+  const verifyMessages = {
+    en: {
+      format_error: "🚨 Code format not recognized 🤔 It should look like: ATS/XXXXX/XXXXX",
+      success: "✅ Your product has been successfully verified! Thank you for your purchase ❤️ Follow us on Instagram @TerpBoys_ATS_LLC",
+      not_real: "❌ The entered code does not belong to the ATS product database. Send details via Instagram: photo, code, city, distributor",
+      used: "‼️ The entered code has already been verified on {{ result.timestamp if result and result.status=='used' else '' }}. Send details via Instagram: photo, code, city, distributor"
+    },
+    pl: {
+      format_error: "🚨 Format kodu nie został rozpoznany 🤔 Powinien wyglądać tak: ATS/XXXXX/XXXXX",
+      success: "✅ Twój produkt został zweryfikowany pomyślnie! Dziękujemy za zakup ❤️ Śledź nas na Instagramie @TerpBoys_ATS_LLC",
+      not_real: "❌ Wpisany kod nie należy do bazy produktów ATS. Prześlij szczegóły przez Instagram: zdjęcie, kod, miasto, dystrybutor",
+      used: "‼️ Wpisany kod został już zweryfikowany w dniu {{ result.timestamp if result and result.status=='used' else '' }}. Prześlij szczegóły przez Instagram: zdjęcie, kod, miasto, dystrybutor"
+    }
+  };
+
+  {% if result %}
+    const messageEl = document.getElementById("verify-message");
+    const status = "{{ result.status }}";
+
+    function updateMessage(lang) {
+      messageEl.textContent = verifyMessages[lang][status];
+      switch(status) {
+        case "format_error": messageEl.className = "text-center mt-6 text-lg text-yellow-400"; break;
+        case "success": messageEl.className = "text-center mt-6 text-lg text-green-400"; break;
+        case "not_real": messageEl.className = "text-center mt-6 text-lg text-red-400"; break;
+        case "used": messageEl.className = "text-center mt-6 text-lg text-orange-400"; break;
+      }
+    }
+
+    // Use the same currentLang as navbar
+    let currentLang = localStorage.getItem("lang") || "en";
+    updateMessage(currentLang);
+
+    // Update message when navbar toggle changes
+    const langToggle = document.getElementById("lang-toggle");
+    langToggle.addEventListener("change", () => {
+      currentLang = langToggle.checked ? "pl" : "en";
+      localStorage.setItem("lang", currentLang);
+      updateMessage(currentLang);
+    });
+  {% endif %}
+</script>
+{% endblock %}

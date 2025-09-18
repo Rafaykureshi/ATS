@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1 class="text-4xl font-bold neon-text text-center mb-8">Admin Dashboard</h1>
+
+<!-- Stats -->
+<div class="grid md:grid-cols-3 gap-6 text-center">
+  <div class="bg-[#111] p-6 rounded-xl neon-border">
+    <p class="text-purple-400 font-bold">Total Codes</p>
+    <p class="text-2xl text-gray-200">{{ total }}</p>
+  </div>
+  <div class="bg-[#111] p-6 rounded-xl neon-border">
+    <p class="text-purple-400 font-bold">Validated</p>
+    <p class="text-2xl text-green-400">{{ validated }}</p>
+  </div>
+  <div class="bg-[#111] p-6 rounded-xl neon-border">
+    <p class="text-purple-400 font-bold">Remaining</p>
+    <p class="text-2xl text-red-400">{{ remaining }}</p>
+  </div>
+</div>
+
+<!-- Add/Delete Codes -->
+<div class="mt-10 bg-[#111] p-6 rounded-xl neon-border">
+  <form method="POST">
+    <label class="block text-gray-300 mb-2">Add New Code</label>
+    <input type="text" name="new_code" class="w-full p-3 rounded-lg bg-black border border-cyan-400 text-white">
+    <button class="mt-4 bg-gradient-to-r from-purple-600 to-cyan-400 text-white px-6 py-2 rounded-lg hover:scale-105 transition">Add</button>
+  </form>
+</div>
+
+<!-- Upload Excel File -->
+<div class="mt-10 bg-[#111] p-6 rounded-xl neon-border">
+  <form action="{{ url_for('admin_import') }}" method="POST" enctype="multipart/form-data">
+    <label class="block text-gray-300 mb-2">Upload Excel File (.xlsx)</label>
+    <input type="file" name="file" class="w-full p-3 rounded-lg bg-black border border-cyan-400 text-white">
+    <button type="submit" class="mt-4 bg-gradient-to-r from-purple-600 to-cyan-400 text-white px-6 py-2 rounded-lg hover:scale-105 transition">Import Codes</button>
+  </form>
+</div>
+
+<!-- Codes Table -->
+<div class="mt-10 overflow-x-auto">
+  <table class="w-full border-collapse border border-[#6a00ff] text-sm">
+    <thead class="bg-[#111] text-purple-400">
+      <tr>
+        <th class="border border-[#6a00ff] px-4 py-2">ID</th>
+        <th class="border border-[#6a00ff] px-4 py-2">Code</th>
+        <th class="border border-[#6a00ff] px-4 py-2">Validated At</th>
+        <th class="border border-[#6a00ff] px-4 py-2">Action</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-300">
+      {% for code in codes %}
+      <tr>
+        <td class="border border-[#6a00ff] px-4 py-2">{{ code[0] }}</td>
+        <td class="border border-[#6a00ff] px-4 py-2">{{ code[1] }}</td>
+        <td class="border border-[#6a00ff] px-4 py-2">{{ code[2] or "Not Validated" }}</td>
+        <td class="border border-[#6a00ff] px-4 py-2">
+          <form method="POST" style="display:inline;">
+            <input type="hidden" name="delete_id" value="{{ code[0] }}">
+            <button class="bg-red-500 text-white px-3 py-1 rounded-lg hover:scale-105 transition">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Logout -->
+<div class="mt-8 text-center">
+  <form action="{{ url_for('logout') }}" method="POST">
+    <button class="bg-gradient-to-r from-red-600 to-red-400 text-white px-6 py-2 rounded-lg hover:scale-105 transition">Logout</button>
+  </form>
+</div>
+{% endblock %}

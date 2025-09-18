@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title or "ATS Vapes" }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.6.6/css/flag-icons.min.css">
+
+
+  <style>
+    body {
+      background:
+        url("{{ url_for('static', filename='images/bg1.png') }}") repeat,
+        linear-gradient(rgba(10, 10, 10, 0.85), rgba(26, 0, 51, 0.85));
+      background-size:cover; /* adjust tile size */
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .neon-text {
+      color: #c084fc;
+      transition: all 0.3s ease-in-out;
+      min-width: 120px; 
+      text-align: center;
+      display: inline-block;
+    }
+    .neon-text:hover {
+      color: #00ffd5;
+      text-shadow: 0 0 8px #00ffd5, 0 0 16px #6a00ff;
+    }
+    .neon-border {
+      box-shadow: 0 0 5px #6a00ff, 0 0 10px #00ffd5;
+    }
+
+    /* Toggle switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+    }
+    .switch input { display: none; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #333;
+      transition: 0.4s;
+      border-radius: 34px;
+      border: 1px solid #6a00ff;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px; width: 26px;
+      left: 2px; bottom: 2px;
+      background: url("https://flagcdn.com/w20/gb.png") no-repeat center/cover;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+    input:checked + .slider:before {
+      transform: translateX(30px);
+      background: url("https://flagcdn.com/w20/pl.png") no-repeat center/cover;
+    }
+  </style>
+</head>
+<body class="text-gray-100 font-sans">
+
+  <!-- Logo -->
+<div class="flex justify-center py-4">
+  <a href="/">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" 
+         alt="ATS Vapes Logo" 
+         class="h-28 p-1  border-[#6a00ff] rounded-lg">
+  </a>
+</div>
+
+
+  <!-- Navbar -->
+  <nav class="bg-[#0a0a0a] border-y border-[#6a00ff] neon-border w-full z-50">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="hidden md:flex justify-center space-x-10 py-4 text-lg font-semibold">
+        <a href="/" class="neon-text" data-translate="home">Home</a>
+        <a href="/shop" class="neon-text" data-translate="shop">Shop</a>
+        <a href="/news" class="neon-text" data-translate="news">News</a>
+        <a href="/verify" class="neon-text" data-translate="verify">Verify Product</a>
+
+        
+
+        <!-- Language Toggle -->
+        <label class="switch">
+          <input type="checkbox" id="lang-toggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden flex justify-center">
+        <button id="menu-btn" class="p-2 text-[#00ffd5]">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2"
+               viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="max-w-7xl mx-auto px-4 py-16">
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-black bg-opacity-70 text-center py-6 mt-12 border-t border-[#6a00ff]">
+    <p class="text-gray-400 text-sm">&copy; {{ current_year }} ATS Vapes. All rights reserved.</p>
+    <p class="text-gray-500 text-xs">Made with ❤️ in UK & Poland</p>
+  </footer>
+
+  <script>
+  const translations = {
+  en: {
+    // Navbar
+    home: "Home",
+    shop: "Shop",
+    news: "News",
+    verify: "Verify Product",
+    login: "Login",
+    logout: "Logout",
+    // Home page
+    welcome_title: "Welcome to ATS",
+     welcome_subtitle: `Premium THC products you can trust manufactured ❤️ in 
+      <img src="https://flagcdn.com/w20/gb.png" alt="GB" class="inline h-5 mx-1">
+      and 
+      <img src="https://flagcdn.com/w20/pl.png" alt="PL" class="inline h-5 mx-1">`,
+    shop_now: "Shop Now",
+    verify_btn: "Verify Product",
+    auth_title: "Authenticity",
+    auth_text: "Easily verify your new product <br><br> 1. Scratch off the verification sticker to reveal the code. <br> 2. Using your phone, scan the NFC tag on your product, it will take you to this website. <br>3. ⁠Enter the code from the sticker to confirm authenticity of your product.",
+    quality_title: "Premium Quality",
+    quality_text: "Our products are manufactured in a trusted, safe, lab environment by professionals. We take care and pride in what we create. <br><br> Heavy metals certifications ✅ <br> Oil certifications ✅",
+    shipping_title: "Fast Shipping and 100% Satisfaction",
+    shipping_text: "Your products are shipped with next day delivery in discreet packaging (UK/PL). <br> EU up to 5 days. <br><br>Any issues, report them to your distributor and we’ll sort it from there.",
+    
+  },
+  pl: {
+    // Navbar
+    home: "Strona Główna",
+    shop: "Sklep",
+    news: "Aktualności",
+    verify: "Zweryfikuj Produkt",
+    login: "Zaloguj",
+    logout: "Wyloguj",
+    // Home page
+    welcome_title: "Witamy na stronie ATS",
+    welcome_subtitle: `Premium produkty z THC którym można zaufać wyprodukowane z ❤️ w 
+      <img src="https://flagcdn.com/w20/gb.png" alt="GB" class="inline h-5 mx-1">
+      oraz 
+      <img src="https://flagcdn.com/w20/pl.png" alt="PL" class="inline h-5 mx-1">`,
+    shop_now: "Kup Teraz",
+    verify_btn: "Zweryfikuj Produkt",
+    auth_title: "Autentyczność",
+    auth_text: "Z łatwością zweryfikuj swój nowy produkt.<br>1. Zdrap zdrapkę z naklejki by ujawnić kod.<br>2. ⁠Używając telefonu, zeskanuj tag NFC, zabierze cię on do naszej strony.<br>3. Wpisz kod spod zdrapki by potwierdzić autentyczność swojego produktu",
+    quality_title: "Jakosc Premium",
+    quality_text: "Nasze produkty są wyprodukowane w zaufanym i bezpiecznym laboratorium przez profesjonalistów. Robimy to starannie i z dumą.<br><br>Certyfikaty na metale ciężkie ✅ <br>Certyfikaty na oleje ✅ ",
+    shipping_title: "Szybka Dostawa i 100% Satysfakcji",
+    shipping_text: "Wasze zamówienie jest nadawane najszybszą możliwą opcją w dyskretnym opakowaniu (UK/PL). <br>UE do 5 dni. <br><br>Wszystkie problemy prosimy zgłaszać bezpośrednio do dystrybutora, a my zajmiemy się resztą.",
+   
+  }
+};
+
+
+  // Load saved language
+  let currentLang = localStorage.getItem("lang") || "en";
+  const toggle = document.getElementById("lang-toggle");
+  toggle.checked = currentLang === "pl";
+
+  function applyTranslations(lang) {
+    document.querySelectorAll("[data-translate]").forEach(el => {
+      const key = el.getAttribute("data-translate");
+      if (translations[lang][key]) {
+        el.innerHTML = translations[lang][key]; 
+      }
+    });
+  }
+
+  // Apply initial language
+  applyTranslations(currentLang);
+
+  // Toggle switch listener
+  toggle.addEventListener("change", () => {
+    currentLang = toggle.checked ? "pl" : "en";
+    localStorage.setItem("lang", currentLang);
+    applyTranslations(currentLang);
+  });
+  </script>
+
+</body>
+</html>
